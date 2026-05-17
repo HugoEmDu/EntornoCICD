@@ -1,0 +1,31 @@
+name: Pipeline de Integracion Continua
+
+# El servidor se activa automáticamente con cada push o merge a la rama main
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Clona el código de tu repositorio en el servidor de IC
+    - name: Clonar el repositorio
+      uses: actions/checkout@v4
+
+    # 2. Instala Node.js en el servidor para usar npm
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    # 3. Instala las dependencias exactamente como están en tu package.json
+    - name: Instalar dependencias
+      run: npm ci
+
+    # 4. Ejecuta la prueba automatizada que acabamos de probar en local
+    - name: Ejecutar pruebas automatizadas
+      run: npm test
