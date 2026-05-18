@@ -1,5 +1,5 @@
 function saludar() {
-    return "Aguante la Formula 1";
+    return "Hola Mundo";
 }
 
 // Exportamos la función para que el archivo de pruebas la pueda leer
