@@ -1,5 +1,5 @@
 function saludar() {
-    return "Todo funcionando OK";
+    return "Hola Mundo UTN";
 }
 
 // Exportamos la función para que el archivo de pruebas la pueda leer
