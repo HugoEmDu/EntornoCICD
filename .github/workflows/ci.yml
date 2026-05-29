@@ -38,7 +38,7 @@ jobs:
 
     # 4. Instala las dependencias exactamente como están en tu package.json
     - name: Instalar dependencias
-      run: npm ci
+      run: npm ci --ignore-scripts
 
     #5. Mover a Servidor de IC
     - name: Mover a Servidor de IC
@@ -58,6 +58,9 @@ jobs:
     # 7. NUEVO: Ejecuta la inspección de código automatizada (SonarCloud)
     - name: SonarQube Cloud Scan
       uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602
+      with:
+        args: >
+          -Dsonar.exclusions=.github/workflows/**
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
