@@ -61,6 +61,7 @@ jobs:
       with:
         args: >
           -Dsonar.exclusions=.github/workflows/**
+          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
