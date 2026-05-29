@@ -1,5 +1,5 @@
 const saludar = require('./app');
 
 test('Validar que el saludo sea Hola Mundo', () => {
-    expect(saludar()).toBe("Hola Morocha :)");
+    expect(saludar()).toBe("Hola Mundo UTN 3.0");
 });
