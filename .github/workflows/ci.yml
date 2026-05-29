@@ -58,14 +58,6 @@ jobs:
     # 7. Ejecuta la inspección de código automatizada (SonarCloud)
     - name: SonarQube Cloud Scan
       uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602
-      with:
-        args: >
-          -Dsonar.exclusions=
-            .github/workflows/**,
-            node_modules/**,
-            app.test.js,
-            coverage/**
-          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
