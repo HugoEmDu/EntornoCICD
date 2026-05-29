@@ -18,28 +18,50 @@ jobs:
       with:
         fetch-depth: 0
 
-    # 2. Instala Node.js en el servidor para usar npm
+    #2. Mover a "In Progress"
+    - name: Mover a En Proceso
+      run: |
+        COMMIT_MSG=$(git log -1 --pretty=%B)
+        CARD_ID=$(echo "$COMMIT_MSG" | grep -oE '\[[a-zA-Z0-9]+\]' | sed 's/[][]//g')
+        if [ ! -z "$CARD_ID" ]; then
+          curl -X PUT -d "idList=6a15d9e8ac4f65852ecd9c15" \
+            -d "key=${{ secrets.TRELLO_API_KEY }}" -d "token=${{ secrets.TRELLO_API_TOKEN }}" \
+            "https://api.trello.com/1/cards/$CARD_ID"
+        fi
+
+
+    # 3. Instala Node.js en el servidor para usar npm
     - name: Configurar Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
 
-    # 3. Instala las dependencias exactamente como están en tu package.json
+    # 4. Instala las dependencias exactamente como están en tu package.json
     - name: Instalar dependencias
       run: npm ci
 
-    # 4. Ejecuta la prueba automatizada que acabamos de probar en local
+    #5. Mover a Servidor de IC
+    - name: Mover a Servidor de IC
+      run: |
+        COMMIT_MSG=$(git log -1 --pretty=%B)
+        CARD_ID=$(echo "$COMMIT_MSG" | grep -oE '\[[a-zA-Z0-9]+\]' | sed 's/[][]//g')
+        if [ ! -z "$CARD_ID" ]; then
+          curl -X PUT -d "idList=6a15d9ee66a5fd2aae57ca07" \
+            -d "key=${{ secrets.TRELLO_API_KEY }}" -d "token=${{ secrets.TRELLO_API_TOKEN }}" \
+            "https://api.trello.com/1/cards/$CARD_ID"
+        fi
+
+    # 6. Ejecuta la prueba automatizada que acabamos de probar en local
     - name: Ejecutar pruebas automatizadas
       run: npm test
 
-    # 5. NUEVO: Ejecuta la inspección de código automatizada (SonarCloud)
+    # 7. NUEVO: Ejecuta la inspección de código automatizada (SonarCloud)
     - name: SonarQube Cloud Scan
       uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-
-    # 6. Mover tarjeta en Trello de forma automática al finalizar con éxito
+    # 8. Mover tarjeta en Trello de forma automática al finalizar con éxito
     - name: Extraer ID de Trello y mover tarjeta con API Oficial
       if: success()
       run: |
