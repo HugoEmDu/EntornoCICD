@@ -37,3 +37,27 @@ jobs:
       uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+
+    # 6. Mover tarjeta en Trello de forma automática al finalizar con éxito
+    - name: Extraer ID de Trello y mover tarjeta con API Oficial
+      if: success()
+      run: |
+        # Obtenemos el mensaje de forma robusta con Git log
+        COMMIT_MSG=$(git log -1 --pretty=%B)
+        
+        # Extrae el texto entre corchetes del commit (ej: [c205bf])
+        CARD_ID=$(echo "$COMMIT_MSG" | grep -oE '\[[a-zA-Z0-9]+\]' | sed 's/[][]//g')
+        
+        if [ -z "$CARD_ID" ]; then
+          echo "No se encontró ID de Trello en el mensaje del commit. Se saltea el movimiento."
+        else
+          echo "Moviendo la tarjeta de Trello con ID: $CARD_ID a la columna Done"
+          
+          # Petición CURL nativa a la API oficial de Trello para mover la tarjeta
+          curl -X PUT \
+            -d "idList=6a15d9f22be478c39b887d20" \
+            -d "key=${{ secrets.TRELLO_API_KEY }}" \
+            -d "token=${{ secrets.TRELLO_API_TOKEN }}" \
+            "https://api.trello.com/1/cards/$CARD_ID"
+        fi
