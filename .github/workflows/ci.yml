@@ -40,8 +40,8 @@ jobs:
     - name: Instalar dependencias
       run: npm ci --ignore-scripts
 
-    #5. Mover a Servidor de IC
-    - name: Mover a Servidor de IC
+    #5. Mover a "Testing/CI"
+    - name: Mover a Testing/CI
       run: |
         COMMIT_MSG=$(git log -1 --pretty=%B)
         CARD_ID=$(echo "$COMMIT_MSG" | grep -oE '\[[a-zA-Z0-9]+\]' | sed 's/[][]//g')
@@ -61,8 +61,8 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-    # 8. Mover tarjeta en Trello de forma automática al finalizar con éxito
-    - name: Extraer ID de Trello y mover tarjeta con API Oficial
+    # 8. Mover "Done"
+    - name: Mover a Done
       if: success()
       run: |
         # Obtenemos el mensaje de forma robusta con Git log
@@ -79,6 +79,22 @@ jobs:
           # Petición CURL nativa a la API oficial de Trello para mover la tarjeta
           curl -X PUT \
             -d "idList=6a15d9f22be478c39b887d20" \
+            -d "key=${{ secrets.TRELLO_API_KEY }}" \
+            -d "token=${{ secrets.TRELLO_API_TOKEN }}" \
+            "https://api.trello.com/1/cards/$CARD_ID"
+        fi
+
+      # 9. Mover a "Fail"
+    - name: Mover a Fail
+      if: failure()
+      run: |
+        COMMIT_MSG=$(git log -1 --pretty=%B)
+        CARD_ID=$(echo "$COMMIT_MSG" | grep -oE '\[[a-zA-Z0-9]+\]' | sed 's/[][]//g')
+        
+        if [ ! -z "$CARD_ID" ]; then
+          echo "¡Alerta! El pipeline falló. Moviendo la tarjeta con ID: $CARD_ID a la columna de Error."
+          curl -X PUT \
+            -d "idList=TU_ID_DE_COLUMNA_DE_ERROR" \
             -d "key=${{ secrets.TRELLO_API_KEY }}" \
             -d "token=${{ secrets.TRELLO_API_TOKEN }}" \
             "https://api.trello.com/1/cards/$CARD_ID"
