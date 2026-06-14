@@ -94,7 +94,7 @@ jobs:
         if [ ! -z "$CARD_ID" ]; then
           echo "¡Alerta! El pipeline falló. Moviendo la tarjeta con ID: $CARD_ID a la columna de Error."
           curl -X PUT \
-            -d "idList=TU_ID_DE_COLUMNA_DE_ERROR" \
+            -d "idList=6a15d88acacf141b1f63cf13" \
             -d "key=${{ secrets.TRELLO_API_KEY }}" \
             -d "token=${{ secrets.TRELLO_API_TOKEN }}" \
             "https://api.trello.com/1/cards/$CARD_ID"
