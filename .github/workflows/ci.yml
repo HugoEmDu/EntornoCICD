@@ -84,7 +84,7 @@ jobs:
             "https://api.trello.com/1/cards/$CARD_ID"
         fi
 
-      # 9. Mover a "Fail"
+    # 9. Mover a "Fail"
     - name: Mover a Fail
       if: failure()
       run: |
@@ -99,3 +99,10 @@ jobs:
             -d "token=${{ secrets.TRELLO_API_TOKEN }}" \
             "https://api.trello.com/1/cards/$CARD_ID"
         fi
+
+    # 10. Desplegar en Render
+    - name: Ejecutar Despliegue Continuo en Render
+      if: success()
+      run: |
+        echo "¡Filtros de calidad aprobados! Notificando a Render para iniciar el despliegue..."
+        curl -X GET "${{ secrets.RENDER_DEPLOY_HOOK }}"
