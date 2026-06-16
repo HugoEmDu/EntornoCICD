@@ -19,4 +19,9 @@ describe('Pruebas de Integración y UI básica', () => {
         const textoH1 = document.getElementById('contenido').textContent;
         expect(textoH1).toContain('Hola Mundo UTN 6.0');
     });
+
+    test('La función inyectarSaludo no falla si el elemento H1 no existe', () => {
+        document.body.innerHTML = '';
+        expect(() => inyectarSaludo()).not.toThrow();
+    });
 });

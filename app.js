@@ -11,4 +11,6 @@ function inyectarSaludo() {
 }
 
 // Exportamos la función para que el archivo de pruebas la pueda leer
-module.exports = { saludar, inyectarSaludo };
+if (typeof module !== 'undefined') {
+    module.exports = { saludar, inyectarSaludo };
+}
