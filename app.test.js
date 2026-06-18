@@ -11,13 +11,13 @@ describe('Pruebas de Integración y UI básica', () => {
     });
 
     test('Validar que el saludo sea Hola Mundo', () => {
-        expect(saludar()).toBe("Hola Mundo UTN 7.0");
+        expect(saludar()).toBe("Hola Mundo UTN 8.0");
     });
 
     test('El archivo index.html contiene el mensaje correcto renderizado', () => {
         inyectarSaludo();
         const textoH1 = document.getElementById('contenido').textContent;
-        expect(textoH1).toContain('Hola Mundo UTN 7.0');
+        expect(textoH1).toContain('Hola Mundo UTN 8.0');
     });
 
     test('La función inyectarSaludo no falla si el elemento H1 no existe', () => {
