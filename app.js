@@ -1,5 +1,5 @@
 function saludar() {
-    return "Hola Mundo UTN 6.0";
+    return "Hola Mundo UTN 7.0";
 }
 
 // Esta es la función que hace la "integración"
